@@ -1,6 +1,7 @@
 package com.workspacespringrest.libraryapi.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.workspacespringrest.libraryapi.controller.dto.BookDTO;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @WebMvcTest
 @AutoConfigureMockMvc
 public class BookControllerTest {
-  static String BOOK_API = "v1/api/books";
+  static String BOOK_API = "/v1/api/books/";
 
   @Autowired
   MockMvc mvc;
@@ -29,15 +30,16 @@ public class BookControllerTest {
   @Test
   @DisplayName("Successful book creation.")
   public void createBookTest() throws Exception {
-    String json = new ObjectMapper().writeValueAsString(null);
+    BookDTO book = BookDTO.builder().author("Jonas").title("Estrutura de Código").isbn("001").build();
+    String json = new ObjectMapper().writeValueAsString(book);
 
     MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(BOOK_API)
         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(json);
 
     mvc.perform(request).andExpect(MockMvcResultMatchers.status().isCreated())
         .andExpect(MockMvcResultMatchers.jsonPath("id").isNotEmpty())
-        .andExpect(MockMvcResultMatchers.jsonPath("title").value("Meu Livro"))
-        .andExpect(MockMvcResultMatchers.jsonPath("author").value("Autor"))
-        .andExpect(MockMvcResultMatchers.jsonPath("isbn").value("123456"));
+        .andExpect(MockMvcResultMatchers.jsonPath("title").value(book.getTitle()))
+        .andExpect(MockMvcResultMatchers.jsonPath("author").value(book.getAuthor()))
+        .andExpect(MockMvcResultMatchers.jsonPath("isbn").value(book.getIsbn()));
   }
 }
