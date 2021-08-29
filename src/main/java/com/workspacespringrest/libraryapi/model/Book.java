@@ -1,17 +1,15 @@
-package com.workspacespringrest.libraryapi.controller.dto;
+package com.workspacespringrest.libraryapi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookDTO {
+public class Book {
   private Long id;
   private String title;
   private String author;
